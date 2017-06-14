@@ -1,0 +1,16 @@
+cloudflare:
+  api_key: blahshdbvehjwd
+  email: myUsername@gmail.com
+  zones:
+    "mysite1.com":
+      - "www"
+      - "@"
+    "mysite2.com":
+      - "www"
+      - "@"
+
+ip_urls:
+  - "https://api.ipify.org"
+  - "http://myip.dnsomatic.com"
+  - "http://www.trackip.net/ip"
+  - "http://myexternalip.com/raw"
