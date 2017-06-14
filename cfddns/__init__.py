@@ -49,10 +49,6 @@ class DDNSClient(object):
                 for cr in current_records:
                     # if that record is an A record
                     if str(cr['type']) == 'A':
-                        # make a copy of that record
-                        dns_record = cr
-                        # set the ip of that record to our external ip
-                        dns_record['content'] = self.external_ip
                         # get the target records
                         target_records = target_zones[zone['name'].lower()]
                         # go through our target records
@@ -63,6 +59,10 @@ class DDNSClient(object):
                             if tr == '@' and cr['name'].lower() == zone['name'].lower():
                                 # Is the current ip different than the current external ip
                                 if str(cr['content']) != str(self.external_ip):
+                                    # make a copy of that record
+                                    dns_record = cr
+                                    # set the ip of that record to our external ip
+                                    dns_record['content'] = self.external_ip
                                     # nice output
                                     sys.stdout.write(
                                         ''.join(
@@ -72,7 +72,7 @@ class DDNSClient(object):
                                     sys.stdout.flush()
                                     # try to update that record
                                     try:
-                                        dns_record = cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
+                                        cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
                                         sys.stdout.write(" OK!")
                                     except CloudFlare.exceptions.CloudFlareAPIError as e:
                                         sys.stdout.write(" Fail!")
@@ -81,6 +81,10 @@ class DDNSClient(object):
                             # if we are targeting a sub domain record
                             elif target_fqdn == cr['name'].lower():
                                 if str(cr['content']) != str(self.external_ip):
+                                    # make a copy of that record
+                                    dns_record = cr
+                                    # set the ip of that record to our external ip
+                                    dns_record['content'] = self.external_ip
                                     # nice output
                                     sys.stdout.write(
                                         ''.join(
@@ -90,7 +94,7 @@ class DDNSClient(object):
                                     sys.stdout.flush()
                                     # try to update that record
                                     try:
-                                        dns_record = cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
+                                        cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
                                         sys.stdout.write(" OK!")
                                     except CloudFlare.exceptions.CloudFlareAPIError as e:
                                         sys.stdout.write(" Fail!")
