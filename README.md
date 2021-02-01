@@ -9,7 +9,7 @@ Sets target DNS record IP addresses to the current external IP address.
 ```bash
 # Get the code
 cd /opt/
-git clone https://github.com/Kirkenjerk/cfddns.git;
+git clone https://github.com/MelonSmasher/cfddns.git;
 # Link the config file
 ln -s /opt/cfddns/config /etc/cfddns;
 # Create a new config
