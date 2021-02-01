@@ -1,5 +1,5 @@
 from __future__ import print_function
-from yaml import load
+from yaml import safe_load
 from cfddns.utils import get_external_ip
 import CloudFlare
 import sys
