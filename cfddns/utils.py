@@ -1,4 +1,4 @@
-from requests import get
+import requests
 
 
 def get_external_ip(urls):
@@ -6,7 +6,11 @@ def get_external_ip(urls):
     :return:
     """
     for url in urls:
-        response = get(url)
-        if response.ok:
-            return response.text
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                return response.text
+        except requests.exceptions.ConnectionError as e:
+            #print(e)
+            pass
     return False

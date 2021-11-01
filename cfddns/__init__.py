@@ -1,4 +1,3 @@
-from __future__ import print_function
 from yaml import safe_load
 from cfddns.utils import get_external_ip
 import CloudFlare
@@ -9,7 +8,7 @@ class Config(object):
     def __init__(self):
         with open('config/config.yaml') as data_file:
             # read the config file
-            c = load(data_file)
+            c = safe_load(data_file)
             self.cf_api_key = c['cloudflare']['api_key']
             self.cf_email = c['cloudflare']['email']
             self.cf_zones = c['cloudflare']['zones']

@@ -10,6 +10,7 @@ cloudflare:
       - "@"
 
 ip_urls:
+  - "https://ifconfig.mei/ip"
   - "https://api.ipify.org"
   - "http://myip.dnsomatic.com"
   - "http://www.trackip.net/ip"
