@@ -8,7 +8,7 @@ Sets target DNS record IP addresses to the current external IP address.
 
 You'll need your Cloudflare API key and Cloudflare account email for the config file.
 
-There is an example config in [config.example.yaml](config.example.yaml).
+There is an example config in [config.example.yaml](config/config.example.yaml).
 
 ### Docker
 
