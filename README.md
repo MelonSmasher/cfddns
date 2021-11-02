@@ -19,7 +19,7 @@ cp config/config.yaml.example config/config.yaml
 docker run -d \
   --name cfddns \
   --restart always \
-  -v "/path/to/config/config.yaml:/cfddns/config/config.yaml" \
+  -v "$(pwd)/config/config.yaml:/cfddns/config/config.yaml" \
   -e "TTL=1800" \
   melonsmasher/cfddns
 ```
