@@ -1,0 +1,9 @@
+.gitignore
+.idea
+README.md
+LICENSE
+__pycache__/
+*.egg
+.DS_Store
+config.yml
+config.yaml
