@@ -1,11 +1,12 @@
 from yaml import safe_load
 from cfddns.utils import get_external_ip
+from logzero import logger
 import CloudFlare
-import sys
 
 
 class Config(object):
     def __init__(self):
+        logger.info("Reading config")
         with open('config/config.yaml') as data_file:
             # read the config file
             c = safe_load(data_file)
@@ -23,6 +24,7 @@ class DDNSClient(object):
         :param zones:
         :param ip_urls:
         """
+        logger.info("Initializing DDNS client")
         # client class variables
         self.api_key = api_key
         self.email = email
@@ -42,6 +44,7 @@ class DDNSClient(object):
         for zone in current_zones:
             # if that zone is a target zone
             if zone['name'] in target_zones:
+                logger.info(f'Updating records for zone: {zone["name"]}')
                 # get the current DNS records for that zone
                 current_records = cf.zones.dns_records.get(zone['id'])
                 # go through each of the current cf DNS records
@@ -54,6 +57,7 @@ class DDNSClient(object):
                         for tr in target_records:
                             # build the target fqdn
                             target_fqdn = '.'.join([tr, zone['name']]).lower()
+                            logger.info(f'Updating record: {target_fqdn}')
                             # If we are targeting the root record
                             if tr == '@' and cr['name'].lower() == zone['name'].lower():
                                 # Is the current ip different than the current external ip
@@ -63,18 +67,16 @@ class DDNSClient(object):
                                     # set the ip of that record to our external ip
                                     dns_record['content'] = self.external_ip
                                     # nice output
-                                    sys.stdout.write(
-                                        ''.join(
-                                            [cr['name'].lower(), ': ', cr['content'], ' ---> ', self.external_ip]
-                                        )
-                                    )
-                                    sys.stdout.flush()
+                                    logger.info(''.join(
+                                        [cr['name'].lower(), ': ', self.external_ip]
+                                    ))
                                     # try to update that record
                                     try:
                                         cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
-                                        sys.stdout.write(" OK!")
+                                        logger.info('OK!')
                                     except CloudFlare.exceptions.CloudFlareAPIError as e:
-                                        sys.stdout.write(" Fail!")
+                                        logger.error('Fail!')
+                                        logger.error(f'{e}')
                                     # newline
                                     print('')
                             # if we are targeting a sub domain record
@@ -85,17 +87,13 @@ class DDNSClient(object):
                                     # set the ip of that record to our external ip
                                     dns_record['content'] = self.external_ip
                                     # nice output
-                                    sys.stdout.write(
-                                        ''.join(
-                                            [target_fqdn, ': ', cr['content'], ' ---> ', self.external_ip]
-                                        )
-                                    )
-                                    sys.stdout.flush()
+                                    logger.info(''.join(
+                                        [target_fqdn, ': ', self.external_ip]
+                                    ))
                                     # try to update that record
                                     try:
                                         cf.zones.dns_records.put(zone['id'], cr['id'], data=dns_record)
-                                        sys.stdout.write(" OK!")
+                                        logger.info('OK!')
                                     except CloudFlare.exceptions.CloudFlareAPIError as e:
-                                        sys.stdout.write(" Fail!")
-                                    # newline
-                                    print('')
+                                        logger.error('Fail!')
+                                        logger.error(f'{e}')

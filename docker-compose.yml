@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  cfddns:
+    image: melonsmasher/cfddns
+    restart: always
+    environment:
+      - TTL=1800
+    volumes:
+      - config/config.yaml:/cfddns/config/config.yaml
